@@ -11,6 +11,7 @@ import {
   Vote, 
   Store,
   ShieldCheck,
+  Building,
   ArrowRight
 } from 'lucide-react';
 
@@ -95,11 +96,14 @@ export default function Home() {
           Condomínio Vida Nova
         </h2>
         <p className="text-slate-600 text-lg max-w-2xl">
-          Seu condomínio na palma da sua mão. Acesse todos os serviços de forma rápida e segura.
+          Selecione o seu perfil de acesso abaixo.
         </p>
       </div>
 
-      {/* Grid de Serviços para os Moradores */}
+      {/* BLOCO 1: PERFIL DO MORADOR (8 Serviços) */}
+      <div className="w-full max-w-6xl mb-4">
+         <h3 className="text-lg font-bold text-slate-500 mb-4 uppercase tracking-wider ml-1">Para o Morador</h3>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-6xl">
         {residentModules.map((module) => {
           const Icon = module.icon;
@@ -124,27 +128,57 @@ export default function Home() {
         })}
       </div>
 
-      {/* Acesso Restrito - Portaria / Administração */}
+      {/* BLOCO 2 e 3: ÁREA RESTRITA (Portaria e Admin) */}
       <div className="mt-16 w-full max-w-6xl">
-        <Link 
-          href="/portaria"
-          className="group relative overflow-hidden flex items-center justify-between bg-[#2E1065] text-white rounded-2xl p-6 md:p-8 hover:bg-[#3b1582] transition-colors shadow-lg"
-        >
-          <div className="relative z-10">
-            <h3 className="text-2xl font-bold mb-1 flex items-center gap-2">
-              <ShieldCheck className="text-violet-300" /> Acesso da Portaria / Administração
-            </h3>
-            <p className="text-violet-200">
-              Área restrita para controle de encomendas, portões, comunicados e gestão do condomínio.
-            </p>
-          </div>
-          <div className="relative z-10 bg-white/10 p-3 rounded-full group-hover:bg-white/20 transition-colors group-hover:translate-x-2">
-            <ArrowRight size={24} />
-          </div>
+        <h3 className="text-lg font-bold text-slate-500 mb-4 uppercase tracking-wider ml-1">
+          Acesso Restrito
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           
-          {/* Efeito Visual de Fundo no Card */}
-          <div className="absolute right-0 top-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-        </Link>
+          {/* Botão Portaria (Operacional) */}
+          <Link 
+            href="/portaria"
+            className="group relative overflow-hidden flex flex-col justify-between bg-[#2E1065] text-white rounded-2xl p-6 md:p-8 hover:bg-[#3b1582] transition-colors shadow-lg h-full"
+          >
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-6 border border-white/10">
+                <ShieldCheck size={32} className="text-violet-200" />
+              </div>
+              <h3 className="text-2xl font-bold mb-3">Painel da Portaria</h3>
+              <p className="text-violet-200 mb-8 max-w-sm">
+                Área operacional exclusiva para controle de acesso, câmera de encomendas e liberação de visitantes.
+              </p>
+            </div>
+            <div className="relative z-10 mt-auto inline-flex items-center gap-2 font-bold bg-white/10 text-white w-fit px-6 py-3 rounded-xl group-hover:bg-white/20 transition-colors border border-white/10">
+              Acessar Portaria <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </div>
+            {/* Efeito Visual de Fundo no Card */}
+            <div className="absolute right-0 top-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+          </Link>
+
+          {/* Botão Administração (Gerencial) */}
+          <Link 
+            href="/admin"
+            className="group relative overflow-hidden flex flex-col justify-between bg-slate-800 text-white rounded-2xl p-6 md:p-8 hover:bg-slate-900 transition-colors shadow-lg h-full"
+          >
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-6 border border-white/10">
+                <Building size={32} className="text-slate-300" />
+              </div>
+              <h3 className="text-2xl font-bold mb-3">Administração / Síndico</h3>
+              <p className="text-slate-400 mb-8 max-w-sm">
+                Área gerencial para gestão financeira, relatórios, boletos e painel de controle do condomínio.
+              </p>
+            </div>
+            <div className="relative z-10 mt-auto inline-flex items-center gap-2 font-bold bg-white/10 text-white w-fit px-6 py-3 rounded-xl group-hover:bg-white/20 transition-colors border border-white/10">
+              Acessar Admin <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </div>
+            {/* Efeito Visual de Fundo no Card */}
+            <div className="absolute right-0 bottom-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl translate-y-1/2 translate-x-1/3"></div>
+          </Link>
+
+        </div>
       </div>
 
     </div>
