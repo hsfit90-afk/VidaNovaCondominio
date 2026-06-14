@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useEncomendas } from '@/hooks/use-encomendas';
-import { PackagePlus, Send, CheckCircle, PackageOpen, ArrowLeft, Search, Clock, Filter } from 'lucide-react';
+import { PackagePlus, Send, CheckCircle, PackageOpen, ArrowLeft, Search, Clock, Filter, Camera } from 'lucide-react';
 import type { Encomenda } from '@/types/encomenda';
 
 export default function PortariaPage() {
@@ -21,15 +21,28 @@ export default function PortariaPage() {
   const [empresa, setEmpresa] = useState('');
   const [volumes, setVolumes] = useState(1);
   const [protocolo, setProtocolo] = useState('');
+  const [photo, setPhoto] = useState<string | null>(null); // Novo estado da foto da encomenda
 
   // Estado para Dar Baixa
   const [baixaId, setBaixaId] = useState<string | null>(null);
   const [recebedorNome, setRecebedorNome] = useState('');
   const [recebedorRg, setRecebedorRg] = useState('');
 
+  // Função para mostrar a foto tirada na tela
+  const handlePhotoCapture = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setPhoto(imageUrl);
+    }
+  };
+
   const handleCadastrar = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!destinatario || !aptoBloco || !empresa) return;
+    if (!destinatario || !aptoBloco || !empresa || !photo) {
+      alert('Por favor, preencha todos os campos obrigatórios e tire a foto.');
+      return;
+    }
 
     addEncomenda({
       destinatario,
@@ -37,7 +50,8 @@ export default function PortariaPage() {
       telefone,
       empresa,
       volumes,
-      protocolo
+      protocolo,
+      // Se no futuro precisar salvar a foto no banco (ex: Supabase), o `photo` vai aqui
     });
 
     // Reset Form
@@ -47,6 +61,7 @@ export default function PortariaPage() {
     setEmpresa('');
     setVolumes(1);
     setProtocolo('');
+    setPhoto(null); // Limpa a foto da tela
     setActiveTab('pendentes');
     
     // Optional alert
@@ -141,7 +156,47 @@ export default function PortariaPage() {
               <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
                 <PackagePlus className="text-purple-600"/> Dados do Recebimento
               </h3>
-              <form onSubmit={handleCadastrar} className="space-y-5">
+              <form onSubmit={handleCadastrar} className="space-y-6">
+                
+                {/* ÁREA DA CÂMERA (ADICIONADA AQUI) */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-700 block">Foto da Encomenda (Obrigatório)</label>
+                  
+                  {photo ? (
+                    <div className="relative rounded-2xl overflow-hidden border-2 border-emerald-500 bg-slate-100 h-64 flex items-center justify-center shadow-inner">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={photo} alt="Encomenda" className="object-cover h-full w-full" />
+                      <button 
+                        type="button"
+                        onClick={() => setPhoto(null)}
+                        className="absolute bottom-4 right-4 bg-white text-rose-600 px-4 py-2 rounded-lg font-bold shadow-md text-sm hover:bg-rose-50 transition-colors"
+                      >
+                        Refazer Foto
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="cursor-pointer border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50 hover:bg-slate-100 hover:border-violet-400 transition-colors h-64 flex flex-col items-center justify-center gap-4 group">
+                      <div className="w-16 h-16 bg-white rounded-full shadow-sm flex items-center justify-center text-[#2E1065] group-hover:scale-110 transition-transform">
+                        <Camera size={32} />
+                      </div>
+                      <div className="text-center">
+                        <span className="block font-bold text-slate-700">Abrir Câmera do Celular</span>
+                        <span className="block text-slate-500 text-sm mt-1">Toque para fotografar a etiqueta</span>
+                      </div>
+                      {/* O capture="environment" abre a câmera traseira do celular */}
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        capture="environment" 
+                        className="hidden" 
+                        onChange={handlePhotoCapture}
+                        required
+                      />
+                    </label>
+                  )}
+                </div>
+
+                {/* Grid Original */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="space-y-1">
                     <label className="text-sm font-medium text-slate-700">Apto / Bloco *</label>
