@@ -1,0 +1,8 @@
+{
+  "name": "Condomio - Encomendas",
+  "description": "Sistema de gestão de encomendas para o Condomínio Residencial Vida Nova.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
